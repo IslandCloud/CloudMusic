@@ -44,4 +44,5 @@ def print_content(url):
         print('{} : {}'.format(song['name'], song['link']))
 
 
-print_content(url)
+if __name__ == '__main__':
+    print_content(url)
