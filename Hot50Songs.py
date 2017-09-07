@@ -1,10 +1,9 @@
-#输入歌手id，返回该歌手热门50单曲及单曲id
+#输入歌手名，返回该歌手热门50单曲及单曲id
 
 import requests
 import bs4
+import json
 
-id = 12140247
-url = 'http://music.163.com/artist?id={}'.format(id)
 
 def get_html(url):
     headers = {
@@ -38,11 +37,36 @@ def get_content(url):
         return 'get content error'
 
 
+def get_artist_id(artist_name):
+    headers = {
+        'Referer': 'http://music.163.com/',
+        'Host': 'music.163.com',
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0 Iceweasel/38.3.0',
+        'Accept': 'text/html,application/xhml+xml,application/xml;q=0.9,*/*;q=0.8'
+    }
+    url = 'http://music.163.com/api/search/pc?s={}&offset=0&limit=100&type=100'.format(artist_name)
+    r = requests.post(url, headers=headers)
+    r.raise_for_status()
+    r.encoding = 'utf-8'
+    html = r.text
+
+    jsons = json.loads(html)
+    id = jsons['result']['artists'][0]['id']
+
+    return id
+
+
 def print_content(url):
     songs = get_content(url)
     for song in songs:
         print('{} : {}'.format(song['name'], song['link']))
 
 
+
 if __name__ == '__main__':
+    artist_name = input('请输入歌手名: ')
+
+    url = 'http://music.163.com/artist?id={}'.format(get_artist_id(artist_name))
     print_content(url)
+
+    print('搜索完成！')
