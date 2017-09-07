@@ -38,22 +38,25 @@ def get_content(url):
 
 
 def get_artist_id(artist_name):
-    headers = {
-        'Referer': 'http://music.163.com/',
-        'Host': 'music.163.com',
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0 Iceweasel/38.3.0',
-        'Accept': 'text/html,application/xhml+xml,application/xml;q=0.9,*/*;q=0.8'
-    }
-    url = 'http://music.163.com/api/search/pc?s={}&offset=0&limit=100&type=100'.format(artist_name)
-    r = requests.post(url, headers=headers)
-    r.raise_for_status()
-    r.encoding = 'utf-8'
-    html = r.text
+    try:
+        headers = {
+            'Referer': 'http://music.163.com/',
+            'Host': 'music.163.com',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Firefox/38.0 Iceweasel/38.3.0',
+            'Accept': 'text/html,application/xhml+xml,application/xml;q=0.9,*/*;q=0.8'
+        }
+        url = 'http://music.163.com/api/search/pc?s={}&offset=0&limit=100&type=100'.format(artist_name)
+        r = requests.post(url, headers=headers)
+        r.raise_for_status()
+        r.encoding = 'utf-8'
+        html = r.text
 
-    jsons = json.loads(html)
-    id = jsons['result']['artists'][0]['id']
+        jsons = json.loads(html)
+        id = jsons['result']['artists'][0]['id']
 
-    return id
+        return id
+    except:
+        return 'get id error'
 
 
 def print_content(url):
