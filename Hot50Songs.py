@@ -66,10 +66,10 @@ def print_content(url):
 
 
 
+
 if __name__ == '__main__':
     artist_name = input('请输入歌手名: ')
 
     url = 'http://music.163.com/artist?id={}'.format(get_artist_id(artist_name))
     print_content(url)
-
     print('搜索完成！')
